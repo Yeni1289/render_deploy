@@ -11,6 +11,8 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.staticfiles',
+    '.onrender.com',  
+    'render-deploy-owls.onrender.com' 
 ]
 
 MIDDLEWARE = [
