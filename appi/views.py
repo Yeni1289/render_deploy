@@ -1,10 +1,14 @@
-import nbformat
 from django.shortcuts import render
-from nbconvert import HTMLExporter
 import os
 
 
 def home(request):
+    # Importaciones pesadas solo cuando se solicita la vista (evita cargarlas en el arranque)
+    try:
+        import nbformat
+    except Exception:
+        nbformat = None
+
     # Ruta del notebook (ajusta el nombre/ubicación si es necesario)
     notebook_path = os.path.join(os.path.dirname(__file__), "notebooks", "analisis.ipynb")
 
@@ -24,7 +28,7 @@ def home(request):
             notebook_path = found
 
     # Intentar cargar el archivo .ipynb; si no existe, usar notebook vacío
-    if not notebook_path or not os.path.exists(notebook_path):
+    if not notebook_path or not os.path.exists(notebook_path) or nbformat is None:
         notebook_node = {"cells": []}
     else:
         with open(notebook_path, "r", encoding="utf-8") as f:

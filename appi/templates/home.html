@@ -11,62 +11,57 @@
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col items-center p-6">
-    <h1 class="text-3xl font-bold text-center mb-6 text-blue-700"> Segundo Parcial</h1>
+    <h1 class="text-3xl font-bold text-center mb-4 text-blue-700"> Segundo Parcial</h1>
 
-    <div class="flex gap-4 mb-6">
-        <button id="btnGraficas" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-blue-500 hover:text-white">Ver Gráficas</button>
-        <button id="btnTablas" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-green-500 hover:text-white">Ver Tablas</button>
+    <div class="w-full max-w-4xl mb-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-indigo-700 mb-3">Descripción</h2>
+            <p class="text-gray-700 mb-3">Se debe de separar el DataSet en los diferentes subconjuntos necesarios para realizar los procesos de entrenamiento, validación y pruebas. Sklearn implementa la función <strong>train_test_split</strong>.</p>
+
+            <p class="text-gray-700 mb-3">Separa el DataSet de pruebas 50% validación, 50% test con:</p>
+            <pre class="bg-gray-100 p-3 rounded mb-3 text-sm overflow-auto">val_set, test_set = train_test_split(test_set, test_size=0.5, random_state=42)</pre>
+
+            <h3 class="text-lg font-medium text-gray-800 mt-4 mb-2">3.- Particionado aleatorio y stratified sampling</h3>
+            <p class="text-gray-700 mb-2">Sklearn implementa la función <strong>train_test_split</strong>, sin embargo por defecto realiza un particionado aleatorio. Incluso con una semilla fija, cada vez que se cargue el Dataset se generan nuevos subconjuntos, lo que puede provocar que, tras muchos intentos, el algoritmo llegue a ver prácticamente todo el Dataset.</p>
+
+            <p class="text-gray-700 mb-2">Para solucionar este problema, sklearn introdujo el parámetro <strong>shuffle</strong>. Si el conjunto es pequeño, existe el riesgo de introducir <em>sampling bias</em>. Para evitarlo, se recomienda <strong>Stratified Sampling</strong>, que garantiza la representación de las características importantes en cada subconjunto mediante el parámetro <strong>stratify</strong> en <strong>train_test_split</strong>.</p>
+
+            <div class="grid grid-cols-3 gap-4 mt-4">
+                <div class="p-3 bg-indigo-50 rounded text-center">
+                    <div class="text-sm text-gray-500">Longitud del Dataset</div>
+                    <div class="text-xl font-semibold text-indigo-700">125,973</div>
+                </div>
+                <div class="p-3 bg-indigo-50 rounded text-center">
+                    <div class="text-sm text-gray-500">Training Set</div>
+                    <div class="text-xl font-semibold text-indigo-700">75,583</div>
+                </div>
+                <div class="p-3 bg-indigo-50 rounded text-center">
+                    <div class="text-sm text-gray-500">Validation / Test (cada uno)</div>
+                    <div class="text-xl font-semibold text-indigo-700">25,195</div>
+                </div>
+            </div>
+
+            <p class="text-gray-600 text-sm mt-4">Comparación: stratified sampling mantiene la proporción de la característica objetivo en cada subset frente al muestreo aleatorio que puede no hacerlo. A continuación se muestran las gráficas comparativas.</p>
+        </div>
     </div>
 
     <!-- Sección de gráficas -->
-    <div id="seccionGraficas" class="w-full max-w-4xl">
+    <div class="w-full max-w-5xl">
         {% if graficas %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {% for grafica in graficas %}
-                <div class="my-8 p-4 bg-white rounded-2xl shadow-md">
-                    <h2 class="text-lg font-semibold text-center mb-2 text-blue-600">{{ grafica.titulo }}</h2>
-                    <img src="data:image/png;base64,{{ grafica.imagen }}" alt="Gráfica" class="mx-auto rounded-lg shadow">
+                <div class="bg-white p-4 rounded-2xl shadow-md">
+                    <h3 class="text-lg font-semibold text-center text-blue-600 mb-2">{{ grafica.titulo }}</h3>
+                    {% if grafica.descripcion %}
+                        <p class="text-sm text-gray-600 mb-3 whitespace-pre-line">{{ grafica.descripcion }}</p>
+                    {% endif %}
+                    <img src="data:image/png;base64,{{ grafica.imagen }}" alt="{{ grafica.titulo }}" class="mx-auto rounded-lg shadow" />
                 </div>
             {% endfor %}
+            </div>
         {% else %}
             <p class="text-center text-gray-500">No se encontraron gráficas en el notebook.</p>
         {% endif %}
     </div>
-
-    <!-- Sección de tablas -->
-    <div id="seccionTablas" class="w-full max-w-5xl hidden">
-        {% if tablas %}
-            {% for tabla in tablas %}
-                <div class="overflow-x-auto my-6 p-4 bg-white border rounded-lg shadow">
-                    {{ tabla|safe }}
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-gray-500">No se encontraron tablas en el notebook.</p>
-        {% endif %}
-    </div>
-
-    <script>
-        const btnGraficas = document.getElementById("btnGraficas");
-        const btnTablas = document.getElementById("btnTablas");
-        const seccionGraficas = document.getElementById("seccionGraficas");
-        const seccionTablas = document.getElementById("seccionTablas");
-
-        btnGraficas.addEventListener("click", () => {
-            seccionGraficas.classList.remove("hidden");
-            seccionTablas.classList.add("hidden");
-            btnGraficas.classList.add("active-btn");
-            btnTablas.classList.remove("active-btn");
-        });
-
-        btnTablas.addEventListener("click", () => {
-            seccionTablas.classList.remove("hidden");
-            seccionGraficas.classList.add("hidden");
-            btnTablas.classList.add("active-btn");
-            btnGraficas.classList.remove("active-btn");
-        });
-
-        // Mostrar gráficas por defecto
-        btnGraficas.classList.add("active-btn");
-    </script>
 </body>
 </html>
