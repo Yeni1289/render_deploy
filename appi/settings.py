@@ -5,19 +5,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = 'django-insecure-change-me-please'
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [
-    '.onrender.com', # Permite la URL de Render con cualquier subdominio
-    'render-deploy-owls.onrender.com', # Tu dominio específico de Render
-    # Si estás en desarrollo local, puedes agregar:
-    '127.0.0.1', 
-    'localhost',
-]
+ALLOWED_HOSTS = ['*',".onrender.com", "render-deploy-owls.onrender.com"]
 
 INSTALLED_APPS = [
     'django.contrib.staticfiles',
-    
 ]
 
 MIDDLEWARE = [
