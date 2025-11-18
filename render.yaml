@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: render-deploy-django
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn appi.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SECRET_KEY
+        value: "REPLACE_ME"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "appi.settings"
+    autodeploy: true
+    healthCheckPath: "/"
+    postDeploy:
+      - python manage.py migrate
+      - python manage.py collectstatic --noinput

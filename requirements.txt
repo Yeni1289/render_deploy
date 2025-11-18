@@ -1,0 +1,8 @@
+Django>=4.2
+gunicorn
+nbconvert
+nbformat
+jupyter
+matplotlib
+pandas
+numpy
